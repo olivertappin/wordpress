@@ -45,9 +45,6 @@ cat <<EOF >./wp-config.php
 * @package WordPress
 */
 
-define('SITE_URL', 'http://$HANDLE.local');
-define('HOME_URL', 'http://$HANDLE.local');
-
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define('DB_NAME', '$HANDLE_wordpress');
@@ -107,6 +104,14 @@ define('WPLANG', '');
 */
 define('WP_DEBUG', false);
 
+/**
+* Turn off the file editor.
+*
+* This has been replaced from DISALLOW_FILE_MODS to enable automatic updates
+* without having to compromise on security.
+*/
+define('DISALLOW_FILE_EDIT', true);
+
 /* That's all, stop editing! Happy blogging. */
 
 /** Absolute path to the WordPress directory. */
@@ -120,7 +125,7 @@ EOF
 # Insert custom blank theme (comment out the unfavored copying process)
 mkdir ./wp-content/themes/$HANDLE
 #cp -r /path/to/my/custom-theme/* ./wp-content/themes/$HANDLE
-scp -r root@myserver.com:/path/to/my/custom-theme/* ./wp-content/themes/$HANDLE
+#rsync -avz root@myserver.com:/path/to/my/custom-theme/. ./wp-content/themes/$HANDLE/.
 
 # Replace placeholder content (this was to replace the comments within the custom theme
 # but I have yet to get it working, maybe something to fix in the near future)
@@ -129,9 +134,9 @@ scp -r root@myserver.com:/path/to/my/custom-theme/* ./wp-content/themes/$HANDLE
 
 # Install plugins (comment out the unfavored copying process)
 #cp -r /path/to/my/plugins/* ./wp-content/plugins/
-scp -r root@myserver.com:/path/to/my/plugins/* ./wp-content/plugins/
+#rsync -avz root@myserver.com:/path/to/my/plugins/. ./wp-content/plugins/.
 
 # Change file permissions and ownership
 sudo chown -R $group:$user ./
 find ./ -type d -exec chmod 755 {} \;
-find ./ -type f -exec chmod 655 {} \;
+find ./ -type f -exec chmod 644 {} \;
